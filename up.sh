@@ -34,13 +34,17 @@ upadtext()
     
     oldver=`head -1 $DATA_PATH/$parstr.txt | awk -F' ' '{print $3,$4}'`
     newver=`head -1 $DATA_PATH/upadtext.tmp | awk -F' ' '{print $3,$4}'`
-    echo -e "$parstr规则本地版本: "$oldver
-    echo -e "$parstr规则在线版本: "$newver
-    if [ "$oldver" != "$newver" ];then
-        \mv $DATA_PATH/upadtext.tmp $DATA_PATH/$parstr.txt
-    if [ $? != 0 ] ; then
-        exit $?
+    echo -e "$parstr 规则本地版本: "$oldver
+    echo -e "$parstr 规则在线版本: "$newver
+    if [ "$newver" == "" ] ; then
+        echo -e "$parstr 规则获取错误."
+        exit
     fi
+    if [ "$oldver" != "$newver" ] ; then
+        \mv $DATA_PATH/upadtext.tmp $DATA_PATH/$parstr.txt
+        if [ $? != 0 ] ; then
+            exit $?
+        fi
         echo -e "更新 $parstr 规则成功."
     else
         echo -e "$parstr 规则没有新版."
