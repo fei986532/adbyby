@@ -38,7 +38,7 @@ upadtext()
     echo -e "$parstr 规则在线版本: "$newver
     if [ "$newver" == "" ] ; then
         echo -e "$parstr 规则获取错误."
-        exit
+        exit 1
     fi
     if [ "$oldver" != "$newver" ] ; then
         \mv $DATA_PATH/upadtext.tmp $DATA_PATH/$parstr.txt
