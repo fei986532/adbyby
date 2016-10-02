@@ -10,27 +10,27 @@ UPDDATE_URL='http://update.adbyby.com/rule3'
 gettext()
 {
     local url=$1
-	echo "规则地址: "$url
-	if [ -f $DATA_PATH/upadtext.tmp ]; then
+    echo "规则地址: "$url
+    if [ -f $DATA_PATH/upadtext.tmp ]; then
         rm -f $DATA_PATH/upadtext.tmp
-	fi
-	wget -c $url -O $DATA_PATH/upadtext.tmp 2>/dev/null
-	if [ $? != 0 ] ; then
-		exit $?
-	fi
+    fi
+    wget -c $url -O $DATA_PATH/upadtext.tmp 2>/dev/null
+    if [ $? != 0 ] ; then
+        exit $?
+    fi
 }
 
 upadtext()
 {
     local parstr=$1
-	if [ "$parstr" == "lazy" ];then
-	    local url=$UPDDATE_URL/$parstr".jpg"
-		gettext $url
-	fi
-	if [ "$parstr" == "video" ];then
-	    local url=$UPDDATE_URL/$parstr".jpg"
-		gettext $url
-	fi
+    if [ "$parstr" == "lazy" ];then
+        local url=$UPDDATE_URL/$parstr".jpg"
+        gettext $url
+    fi
+    if [ "$parstr" == "video" ];then
+        local url=$UPDDATE_URL/$parstr".jpg"
+        gettext $url
+    fi
     
     oldver=`head -1 $DATA_PATH/$parstr.txt | awk -F' ' '{print $3,$4}'`
     newver=`head -1 $DATA_PATH/upadtext.tmp | awk -F' ' '{print $3,$4}'`
@@ -38,6 +38,9 @@ upadtext()
     echo -e "$parstr规则在线版本: "$newver
     if [ "$oldver" != "$newver" ];then
         \mv $DATA_PATH/upadtext.tmp $DATA_PATH/$parstr.txt
+    if [ $? != 0 ] ; then
+        exit $?
+    fi
         echo -e "更新 $parstr 规则成功."
     else
         echo -e "$parstr 规则没有新版."
