@@ -52,9 +52,9 @@ upadtext()
 }
 
 InstallLED(){
-    ln -sf /etc/config/adbyby_up /bin/adbyby_up
-    [ ! -e '/etc/config/adbyby_up' ] && \mv $0 /etc/config/adbyby_up && chmod 777 /etc/config/adbyby_up
-    [ -z "`grep \"\*/${OnTime} \* \* \* \* /etc/config/adbyby_up\" /etc/crontabs/root`" ] && echo "*/${OnTime} * * * * /etc/config/adbyby_up" >>/etc/crontabs/root && crontab -l
+    ln -sf /etc/config/ad_up_byby /bin/ad_up_byby
+    [ ! -e '/etc/config/ad_up_byby' ] && \mv $0 /etc/config/ad_up_byby && chmod 777 /etc/config/ad_up_byby
+    [ -z "`grep \"\*/${OnTime} \* \* \* \* /etc/config/ad_up_byby\" /etc/crontabs/root`" ] && echo "*/${OnTime} * * * * /etc/config/ad_up_byby" >>/etc/crontabs/root && crontab -l
 }
 
 aa=$(InstallLED)
