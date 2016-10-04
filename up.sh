@@ -46,7 +46,10 @@ upadtext()
             exit $?
         fi
         echo -e "更新 $parstr 规则成功."
-		/etc/init.d/adbyby restart 2>/dev/null
+        ((i++))
+        if [ $i -gt 2 ]; then
+            /etc/init.d/adbyby restart 2>/dev/null
+        fi
     else
         echo -e "$parstr 规则没有新版."
     fi
@@ -58,6 +61,7 @@ InstallLED(){
     [ -z "`grep \"\*/${OnTime} \* \* \* \* /etc/config/ad_up_byby\" /etc/crontabs/root`" ] && echo "*/${OnTime} * * * * /etc/config/ad_up_byby" >>/etc/crontabs/root && crontab -l
 }
 
+i=1
 aa=$(InstallLED)
 echo "正在更新过滤规则,请稍等..."
 bb=$(upadtext lazy)
