@@ -16,7 +16,7 @@ gettext()
     fi
     wget -c $url -O $DATA_PATH/upadtext.tmp 2>/dev/null
     if [ $? != 0 ] ; then
-        exit $?
+        exit "Error: "$?
     fi
 }
 
