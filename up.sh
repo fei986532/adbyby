@@ -46,6 +46,7 @@ upadtext()
             exit $?
         fi
         echo -e "更新 $parstr 规则成功."
+		/etc/init.d/adbyby restart 2>/dev/null
     else
         echo -e "$parstr 规则没有新版."
     fi
