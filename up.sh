@@ -35,12 +35,12 @@ upadtext()
     
     oldver=`head -1 $DATA_PATH/$parstr.txt | awk -F' ' '{print $3,$4}'`
     newver=`head -1 $DATA_PATH/upadtext.tmp | awk -F' ' '{print $3,$4}'`
-    echo -e "¹æÔòÃû³Æ: "$parstr
-    echo -e "¹æÔòµØÖ·: "$url
-    echo -e "±¾µØ°æ±¾: "$oldver
-    echo -e "ÔÚÏß°æ±¾: "$newver
+    echo -e "è§„åˆ™åç§°: "$parstr
+    echo -e "è§„åˆ™åœ°å€: "$url
+    echo -e "æœ¬åœ°ç‰ˆæœ¬: "$oldver
+    echo -e "åœ¨çº¿ç‰ˆæœ¬: "$newver
     if [ "$newver" == "" ] ; then
-        echo -e "¸üĞÂ½á¹û: »ñÈ¡´íÎó."
+        echo -e "æ›´æ–°ç»“æœ: è·å–é”™è¯¯."
         exit 1
     fi
     if [ "$oldver" != "$newver" ] ; then
@@ -49,13 +49,13 @@ upadtext()
             echo "Error: "$?
             exit $?
         fi
-        echo -e "¸üĞÂ½á¹û: ¸üĞÂ³É¹¦."
+        echo -e "æ›´æ–°ç»“æœ: æ›´æ–°æˆåŠŸ."
         ((i++))
         if [ $i -gt 2 ]; then
             /etc/init.d/adbyby restart 2>/dev/null
         fi
     else
-        echo -e "¸üĞÂ½á¹û: ¹æÔòÒÑÊÇ×îĞÂ°æ±¾."
+        echo -e "æ›´æ–°ç»“æœ: è§„åˆ™å·²æ˜¯æœ€æ–°ç‰ˆæœ¬."
     fi
 }
 
@@ -71,7 +71,7 @@ Install_UP(){
     [ -z "`grep \"\*/${OnTime} \* \* \* \* /etc/config/ad_up_byby\" /etc/crontabs/root`" ] && echo "*/${OnTime} * * * * /etc/config/ad_up_byby" >>/etc/crontabs/root && crontab -l
 }
 
-echo "ÕıÔÚ¸üĞÂ¹ıÂË¹æÔò,ÇëÉÔµÈ..."
+echo "æ­£åœ¨æ›´æ–°è¿‡æ»¤è§„åˆ™,è¯·ç¨ç­‰..."
 Install_UP
 upadtext lazy
 upadtext video
