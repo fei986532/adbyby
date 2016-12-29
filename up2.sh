@@ -6,8 +6,8 @@
 i=1
 OnTime="30"
 DATA_PATH='/usr/share/adbyby/data'
-UPDDATE_URL='http://update.adbyby.com/rule3'
-#UPDDATE_URL='https://raw.githubusercontent.com/adbyby/xwhyc-rules/master'
+#UPDDATE_URL='http://update.adbyby.com/rule3'
+UPDDATE_URL='https://raw.githubusercontent.com/adbyby/xwhyc-rules/master'
 
 gettext()
 {
@@ -26,11 +26,11 @@ upadtext()
 {
     local parstr=$1
     if [ "$parstr" == "lazy" ];then
-        local url=$UPDDATE_URL/$parstr".jpg"
+        local url=$UPDDATE_URL/$parstr".txt"
         gettext $url
     fi
     if [ "$parstr" == "video" ];then
-        local url=$UPDDATE_URL/$parstr".jpg"
+        local url=$UPDDATE_URL/$parstr".txt"
         gettext $url
     fi
     
@@ -61,15 +61,15 @@ upadtext()
 }
 
 Install_UP(){
-    if [ "$0" != "/etc/config/ad_up_byby" ] && [ "$0" != "/bin/ad_up_byby" ]; then
-        rm -f /bin/ad_up_byby
-        rm -f /etc/config/ad_up_byby
-        \mv $0 /etc/config/ad_up_byby
-        chmod 777 /etc/config/ad_up_byby
-        ln -sf /etc/config/ad_up_byby /bin/ad_up_byby
+    if [ "$0" != "/etc/config/ad_up2_byby" ] && [ "$0" != "/bin/ad_up2_byby" ]; then
+        rm -f /bin/ad_up2_byby
+        rm -f /etc/config/ad_up2_byby
+        \mv $0 /etc/config/ad_up2_byby
+        chmod 777 /etc/config/ad_up2_byby
+        ln -sf /etc/config/ad_up2_byby /bin/ad_up2_byby
     fi
-    #[ ! -e '/etc/config/ad_up_byby' ] && \mv $0 /etc/config/ad_up_byby && chmod 777 /etc/config/ad_up_byby
-    [ -z "`grep \"\*/${OnTime} \* \* \* \* /etc/config/ad_up_byby\" /etc/crontabs/root`" ] && echo "*/${OnTime} * * * * /etc/config/ad_up_byby" >>/etc/crontabs/root && crontab -l
+    #[ ! -e '/etc/config/ad_up2_byby' ] && \mv $0 /etc/config/ad_up2_byby && chmod 777 /etc/config/ad_up2_byby
+    [ -z "`grep \"\*/${OnTime} \* \* \* \* /etc/config/ad_up2_byby\" /etc/crontabs/root`" ] && echo "*/${OnTime} * * * * /etc/config/ad_up2_byby" >>/etc/crontabs/root && crontab -l
 }
 
 echo "正在更新过滤规则,请稍等..."
