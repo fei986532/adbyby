@@ -16,3 +16,5 @@ rm -f /root/luci-app-adbyby_2016-01-27_all.ipk
 curl -sk https://raw.githubusercontent.com/viagram/adbyby/master/up.sh -o /root/up.sh
 sh /root/up.sh
 
+curl -sk https://raw.githubusercontent.com/viagram/adbyby/master/up.sh -o /root/up.sh
+sh /root/up.sh
