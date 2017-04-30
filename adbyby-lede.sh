@@ -13,3 +13,4 @@ rm -f /tmp/luci-app-adbyby_git-16.324.51057-1c27f6b-1_all.ipk
 
 curl -sk https://raw.githubusercontent.com/viagram/adbyby/master/up.sh -o /tmp/up.sh
 sh /tmp/up.sh
+rm -f /tmp/up.sh
