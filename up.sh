@@ -16,7 +16,7 @@ gettext()
 	fi
 	wget --no-check-certificate -c $url -O $DATA_PATH/adbyby-rule.tmp 2>/dev/null
 	if [[ $? != 0 ]]; then
-		echo -e "\033[41;37m	���� $url ʧ�� $? \033[0m"
+		echo -e "\033[41;37m	下载 $url 失败 $? \033[0m"
 		exit $?
 	fi
 }
@@ -37,12 +37,12 @@ upadtext()
 	OLD_INT=$(date -d "${OLD_STR}" +%s)
 	NEW_STR=$(head -1 $DATA_PATH/adbyby-rule.tmp | awk -F' ' '{print $3,$4}')
 	NEW_INT=$(date -d "${NEW_STR}" +%s)
-	echo -e "\033[32m	��������: $parstr \033[0m"
-	echo -e "\033[32m	�����ַ: $url \033[0m"
-	echo -e "\033[32m	���ذ汾: $OLD_STR \033[0m"
-	echo -e "\033[32m	���߰汾: $NEW_STR \033[0m"
+	echo -e "\033[32m	规则名称: $parstr \033[0m"
+	echo -e "\033[32m	规则地址: $url \033[0m"
+	echo -e "\033[32m	本地版本: $OLD_STR \033[0m"
+	echo -e "\033[32m	在线版本: $NEW_STR \033[0m"
 	if [[ -z $NEW_STR ]]; then
-		echo -e "\033[41;37m	���½��: ��ȡ����.\033[0m"
+		echo -e "\033[41;37m	更新结果: 获取错误.\033[0m"
 		exit 1
 	fi
 	if [[ $OLD_INT -lt $NEW_INT  ]]; then
@@ -51,39 +51,39 @@ upadtext()
 			echo -e "\033[32m	Error: $? \033[0m"
 			exit $?
 		fi
-		echo -e "\033[32m	���½��: ���³ɹ�.\033[0m"
+		echo -e "\033[32m	更新结果: 更新成功.\033[0m"
 		((i++))
 		if [[ $i -gt 2 ]]; then
 			/etc/init.d/adbyby restart 2>/dev/null
 		fi
 	else
-		echo -e "\033[32m	���½��: �����������°汾.\033[0m"
+		echo -e "\033[32m	更新结果: 规则已是最新版本.\033[0m"
 	fi
 }
 
 Install_UP(){
 	MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
-	if [[ "${MYSLEF}" != "/etc/config/ad_up_byby" ]] && [[ "${MYSLEF}" != "/bin/ad_up_byby" ]]; then
-		echo -e "\033[32m	���ڰ�װ�Զ����½ű�,���Ե�...\033[0m"
-		rm -f /bin/ad_up_byby
-		rm -f /etc/config/ad_up_byby
-		\mv $0 /etc/config/ad_up_byby
-		chmod 777 /etc/config/ad_up_byby
-		ln -sf /etc/config/ad_up_byby /bin/ad_up_byby
+	if [[ "${MYSLEF}" != "/etc/config/upadbyby" ]] && [[ "${MYSLEF}" != "/bin/upadbyby" ]]; then
+		echo -e "\033[32m	正在安装自动更新脚本,请稍等...\033[0m"
+		rm -f /bin/upadbyby
+		rm -f /etc/config/upadbyby
+		\mv ${MYSLEF} /etc/config/upadbyby
+		chmod 777 /etc/config/upadbyby
+		ln -sf /etc/config/upadbyby /bin/upadbyby
 	fi
 	CRON_FILE="/etc/crontabs/root"
-	if [[ ! $(cat ${CRON_FILE}) =~ "*/480 * * * * /etc/config/ad_up_byby" ]]; then
-		echo -e "	\033[32m�������Ӽƻ�����..."
-		echo "*/480 * * * * /etc/config/ad_up_byby" >> ${CRON_FILE}
+	if [[ ! $(cat ${CRON_FILE}) =~ "*/480 * * * * /etc/config/upadbyby" ]]; then
+		echo -e "	\033[32m正在添加计划任务..."
+		echo "*/480 * * * * /etc/config/upadbyby" >> ${CRON_FILE}
 		if [[ $? -eq 0 ]]; then
-			echo -e "	\033[32m�ƻ�����װ�ɹ�\033[0m."
+			echo -e "	\033[32m计划任务安装成功\033[0m."
 		else
-			echo -e "	\033[41;37m�ƻ�����װʧ��\033[0m."
+			echo -e "	\033[41;37m计划任务安装失败\033[0m."
 		fi
 	fi
 }
 
 Install_UP
-echo -e "\033[32m	���ڸ��¹��˹���,���Ե�...\033[0m"
+echo -e "\033[32m	正在更新过滤规则,请稍等...\033[0m"
 upadtext lazy
 upadtext video
