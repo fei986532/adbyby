@@ -5,14 +5,14 @@
 
 opkg update
 
-curl -sk https://raw.githubusercontent.com/viagram/adbyby/master/adbyby_2.7.ipk -o /tmp/adbyby_2.7.ipk
-opkg install /tmp/adbyby_2.7.ipk #--force-depends --force-overwrite --force-maintainer
+wget -c https://raw.githubusercontent.com/viagram/adbyby/master/adbyby_2.7.ipk -O /tmp/adbyby_2.7.ipk  --no-check-certificate
+opkg install /tmp/adbyby_2.7.ipk #--force-depends --force-Overwrite --force-maintainer
 rm -f /tmp/adbyby_2.7.ipk
 
-curl -sk https://raw.githubusercontent.com/viagram/adbyby/master/luci-app-adbyby.ipk -o /tmp/luci-app-adbyby.ipk
-opkg install /tmp/luci-app-adbyby.ipk #--force-depends --force-overwrite --force-maintainer
+wget -c https://raw.githubusercontent.com/viagram/adbyby/master/luci-app-adbyby.ipk -O /tmp/luci-app-adbyby.ipk  --no-check-certificate
+opkg install /tmp/luci-app-adbyby.ipk #--force-depends --force-Overwrite --force-maintainer
 rm -f /tmp/luci-app-adbyby.ipk
 
-curl -sk https://raw.githubusercontent.com/viagram/adbyby/master/up.sh -o /tmp/up.sh
+wget -c https://raw.githubusercontent.com/viagram/adbyby/master/up.sh -O /tmp/up.sh --no-check-certificate
 bash /tmp/up.sh
 rm -f /tmp/up.sh
