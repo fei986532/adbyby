@@ -8,8 +8,7 @@ OnTime="30"
 DATA_PATH='/usr/share/adbyby/data'
 UPDDATE_URL='http://update.adbyby.com/rule3'
 
-gettext()
-{
+function gettext(){
 	local url=$1
 	if [[ -f $DATA_PATH/adbyby-rule.tmp ]]; then
 		rm -f $DATA_PATH/adbyby-rule.tmp
@@ -21,23 +20,21 @@ gettext()
 	fi
 }
 
-upadtext()
-{
+function upadtext(){
 	local parstr=$1
-	if [[ "$parstr" == "lazy" ]];then
+	if [ "$parstr" == "lazy" -o "$parstr" == "video" ];then
+		echo
+		echo -e "\033[32m	正在更新: ${parstr}规则,请稍等...\033[0m"
 		local url=$UPDDATE_URL/$parstr".jpg"
 		gettext $url
+	else
+		echo -e "\033[41;37m	未知规则:${parstr}.\033[0m"
+		exit 1
 	fi
-	if [[ "$parstr" == "video" ]];then
-		local url=$UPDDATE_URL/$parstr".jpg"
-		gettext $url
-	fi
-	
 	OLD_STR=$(head -1 $DATA_PATH/$parstr.txt | awk -F' ' '{print $3,$4}')
 	OLD_INT=$(date -d "${OLD_STR}" +%s)
 	NEW_STR=$(head -1 $DATA_PATH/adbyby-rule.tmp | awk -F' ' '{print $3,$4}')
 	NEW_INT=$(date -d "${NEW_STR}" +%s)
-	echo -e "\033[32m	规则名称: $parstr \033[0m"
 	echo -e "\033[32m	规则地址: $url \033[0m"
 	echo -e "\033[32m	本地版本: $OLD_STR \033[0m"
 	echo -e "\033[32m	在线版本: $NEW_STR \033[0m"
@@ -61,13 +58,18 @@ upadtext()
 	fi
 }
 
-Install_UP(){
+function Install_UP(){
 	MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
 	if [[ "${MYSLEF}" != "/etc/config/upadbyby" ]] && [[ "${MYSLEF}" != "/bin/upadbyby" ]]; then
 		echo -e "\033[32m	正在安装自动更新脚本,请稍等...\033[0m"
 		rm -f /bin/upadbyby
 		rm -f /etc/config/upadbyby
 		\mv ${MYSLEF} /etc/config/upadbyby
+		if [[ $? -eq 0 ]]; then
+			echo -e "	\033[32m自动更新脚本安装成功.\033[0m"
+		else
+			echo -e "	\033[41;37m自动更新脚本安装失败.\033[0m"
+		fi
 		chmod 777 /etc/config/upadbyby
 		ln -sf /etc/config/upadbyby /bin/upadbyby
 	fi
@@ -76,14 +78,13 @@ Install_UP(){
 		echo -e "	\033[32m正在添加计划任务..."
 		echo "*/480 * * * * /etc/config/upadbyby" >> ${CRON_FILE}
 		if [[ $? -eq 0 ]]; then
-			echo -e "	\033[32m计划任务安装成功\033[0m."
+			echo -e "	\033[32m计划任务安装成功.\033[0m"
 		else
-			echo -e "	\033[41;37m计划任务安装失败\033[0m."
+			echo -e "	\033[41;37m计划任务安装失败.\033[0m"
 		fi
 	fi
 }
 
 Install_UP
-echo -e "\033[32m	正在更新过滤规则,请稍等...\033[0m"
 upadtext lazy
 upadtext video
