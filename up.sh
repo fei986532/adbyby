@@ -28,7 +28,7 @@ function upadtext(){
 		local url=$UPDDATE_URL/$parstr".jpg"
 		gettext $url
 	else
-		echo -e "\033[41;37m	未知规则:${parstr}.\033[0m"
+		echo -e "\033[41;37m	未知规则:${parstr}\033[0m"
 		exit 1
 	fi
 	OLD_STR=$(head -1 $DATA_PATH/$parstr.txt | awk -F' ' '{print $3,$4}')
