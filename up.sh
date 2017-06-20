@@ -13,11 +13,20 @@ function gettext(){
 	if [[ -f $DATA_PATH/adbyby-rule.tmp ]]; then
 		rm -f $DATA_PATH/adbyby-rule.tmp
 	fi
-	wget --no-check-certificate -c $url -O $DATA_PATH/adbyby-rule.tmp 2>/dev/null
+	command -v wget >/dev/null 2>&1
+	if [ $? == 0 ]; then
+		wget --no-check-certificate -t3 -T5 -c $url -O $DATA_PATH/adbyby-rule.tmp  >/dev/null 2>&1
+	else
+		command -v curl >/dev/null 2>&1
+		if [ $? == 0 ]; then
+		   curl -sk $url -o $DATA_PATH/adbyby-rule.tmp --retry 3 >/dev/null 2>&1
+		fi
+	fi
 	if [[ $? != 0 ]]; then
 		echo -e "\033[41;37m	下载 $url 失败 $? \033[0m"
 		exit $?
 	fi
+	return 0
 }
 
 function upadtext(){
@@ -26,6 +35,11 @@ function upadtext(){
 		echo
 		echo -e "\033[32m	正在更新: ${parstr}规则,请稍等...\033[0m"
 		local url=$UPDDATE_URL/$parstr".jpg"
+		gettext $url
+	elif [ "$parstr" == "user" ];then
+		echo
+		echo -e "\033[32m	正在更新: ${parstr}规则,请稍等...\033[0m"
+		local url=https://ywnas.com/lede/user.txt
 		gettext $url
 	else
 		echo -e "\033[41;37m	未知规则:${parstr}\033[0m"
@@ -43,11 +57,13 @@ function upadtext(){
 		exit 1
 	fi
 	if [[ $OLD_INT -lt $NEW_INT  ]]; then
-		\mv $DATA_PATH/adbyby-rule.tmp $DATA_PATH/$parstr.txt
+		\cp -f $DATA_PATH/adbyby-rule.tmp $DATA_PATH/$parstr.txt
 		if [[ $? != 0  ]]; then
+			rm -f $DATA_PATH/adbyby-rule.tmp
 			echo -e "\033[32m	Error: $? \033[0m"
 			exit $?
 		fi
+		rm -f $DATA_PATH/adbyby-rule.tmp
 		echo -e "\033[32m	更新结果: 更新成功.\033[0m"
 		((i++))
 		if [[ $i -gt 2 ]]; then
@@ -86,5 +102,6 @@ function Install_UP(){
 }
 
 Install_UP
+upadtext user
 upadtext lazy
 upadtext video
