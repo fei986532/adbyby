@@ -36,11 +36,6 @@ function upadtext(){
 		echo -e "\033[32m	正在更新: ${parstr}规则,请稍等...\033[0m"
 		local url=$UPDDATE_URL/$parstr".jpg"
 		gettext $url
-	elif [ "$parstr" == "user" ];then
-		echo
-		echo -e "\033[32m	正在更新: ${parstr}规则,请稍等...\033[0m"
-		local url=https://ywnas.com/lede/user.txt
-		gettext $url
 	else
 		echo -e "\033[41;37m	未知规则:${parstr}\033[0m"
 		exit 1
@@ -102,6 +97,5 @@ function Install_UP(){
 }
 
 Install_UP
-upadtext user
 upadtext lazy
 upadtext video
