@@ -17,14 +17,16 @@ function uprule(){
         if command -v wget >/dev/null 2>&1; then
             url="http://update.adbyby.com/rule3/${1}.jpg"
             wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp  >/dev/null 2>&1
-            if [[ $? -ne 0 ]]; then
+            if ! head -1 $DATA_PATH/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}'; then
+                rm -f $DATA_PATH/adbyby-rule.tmp
                 url="https://raw.githubusercontent.com/kysdm/adbyby/master/xwhyc-rules/${1}.txt"
                 wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp  >/dev/null 2>&1
             fi
         elif command -v curl >/dev/null 2>&1; then
             url="http://update.adbyby.com/rule3/${1}.jpg"
             curl -sk ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 >/dev/null 2>&1
-            if [[ $? -ne 0 ]]; then
+            if ! head -1 $DATA_PATH/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}'; then
+                rm -f $DATA_PATH/adbyby-rule.tmp
                 url="https://raw.githubusercontent.com/kysdm/adbyby/master/xwhyc-rules/${1}.txt"
                 curl -sk ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 >/dev/null 2>&1
             fi
@@ -37,9 +39,9 @@ function uprule(){
         echo -e "\033[41;37m    未知规则:${parstr}\033[0m"
         exit 1
     fi
-    OLD_STR=$(head -1 $DATA_PATH/$parstr.txt | awk -F' ' '{print $3,$4}')
+    OLD_STR=$(head -1 $DATA_PATH/$parstr.txt | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}')
     OLD_INT=$(date -d "${OLD_STR}" +%s)
-    NEW_STR=$(head -1 $DATA_PATH/adbyby-rule.tmp | awk -F' ' '{print $3,$4}')
+    NEW_STR=$(head -1 $DATA_PATH/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}')
     NEW_INT=$(date -d "${NEW_STR}" +%s)
     echo -e "\033[32m    规则地址: $url \033[0m"
     echo -e "\033[32m    本地版本: $OLD_STR \033[0m"
