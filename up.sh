@@ -80,6 +80,7 @@ function Install_UP(){
             echo -e "    \033[41;37m自动更新脚本安装失败.\033[0m"
         fi
         chmod +x /bin/upadbyby
+        rm -f $(readlink -f $0)
     fi
     CRON_FILE="/etc/crontabs/root"
     if [[ ! $(cat ${CRON_FILE}) =~ "*/480 * * * * /bin/upadbyby" ]]; then
