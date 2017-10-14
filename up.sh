@@ -94,5 +94,7 @@ function Install_UP(){
 }
 
 Install_UP
-uprule lazy
-uprule video
+if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
+    uprule lazy
+    uprule video
+fi
