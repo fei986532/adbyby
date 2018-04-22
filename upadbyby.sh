@@ -8,7 +8,7 @@ DATA_PATH='/usr/share/adbyby/data'
 
 function uprule(){
     local parstr=${1}
-    if [[ "${parstr}" == "lazy" || "${parstr}" == "video" ]];then
+    if [[ "${parstr}" == "lazy" || "${parstr}" == "video" ]]; then
         echo
         echo -e "\033[32m    正在更新: ${parstr}规则,请稍等...\033[0m"
         if [[ -f $DATA_PATH/adbyby-rule.tmp ]]; then
