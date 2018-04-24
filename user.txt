@@ -14,3 +14,8 @@
 !  支持通配符*和?
 |http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@
 !  ------------------------------------------------------------------------------------------
+||microfun.cn
+||222.186.61.91
+||microfun.cn
+||tuisnake.com
+||sifuhe.cn

