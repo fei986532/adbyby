@@ -76,7 +76,7 @@ function upuser(){
 }
 
 function Install_UP(){
-    VERSION=1.0.0
+    VERSION=02
     curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
     LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}' | egrep -io '[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}')
     NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}' | egrep -io '[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}')
