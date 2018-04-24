@@ -21,6 +21,8 @@ function uprule(){
                 url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
                 if ! wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp >/dev/null 2>&1; then
                     echo -e "\033[41;37m    下载 ${parstr} 规则失败 $? \033[0m"
+                    rm -f $DATA_PATH/adbyby-rule.tmp
+                    exit 1
                 fi
             fi
         elif command -v curl >/dev/null 2>&1; then
@@ -30,13 +32,15 @@ function uprule(){
                 url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
                 if ! curl -skL ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 >/dev/null 2>&1; then
                     echo -e "\033[41;37m    下载 ${parstr} 规则失败 $? \033[0m"
+                    rm -f $DATA_PATH/adbyby-rule.tmp
+                    exit 1
                 fi
             fi
         fi
         if ! head -1 $DATA_PATH/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}' >/dev/null 2>&1; then
             echo -e "\033[41;37m    下载 $url 失败 $? \033[0m"
             rm -f $DATA_PATH/adbyby-rule.tmp
-            exit $?
+            exit 1
         fi
     else
         echo -e "\033[41;37m    未知规则: ${parstr}\033[0m"
@@ -55,7 +59,7 @@ function uprule(){
         else
             echo -e "\033[32m    更新结果: 错误[$?] \033[0m"
             rm -f $DATA_PATH/adbyby-rule.tmp
-            exit $?
+            exit 1
         fi
         ((i++))
         if [[ ${i} -gt 2 ]]; then
@@ -65,6 +69,24 @@ function uprule(){
         echo -e "\033[32m    更新结果: 规则已是最新版本.\033[0m"
     fi
     rm -f $DATA_PATH/adbyby-rule.tmp
+}
+
+function upuser(){
+    if [[ -f $DATA_PATH/adbyby-rule.tmp ]]; then
+        rm -f $DATA_PATH/adbyby-rule.tmp
+    fi
+    url="https://raw.githubusercontent.com/viagram/adbyby/master/user.txt"
+    if command -v wget >/dev/null 2>&1; then
+        if ! wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp >/dev/null 2>&1; then
+            rm -f $DATA_PATH/adbyby-rule.tmp
+           if command -v curl >/dev/null 2>&1; then
+                if ! curl -skL ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
+                    rm -f $DATA_PATH/adbyby-rule.tmp
+                    exit 1
+                fi
+            fi
+        fi
+    fi
 }
 
 function Install_UP(){
@@ -89,6 +111,7 @@ function Install_UP(){
             echo -e "    \033[32m计划任务安装成功.\033[0m"
         else
             echo -e "    \033[41;37m计划任务安装失败.\033[0m"
+            exit 1
         fi
     fi
 }
@@ -97,4 +120,5 @@ Install_UP
 if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
     uprule lazy
     uprule video
+    upuser
 fi
