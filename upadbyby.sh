@@ -76,10 +76,10 @@ function upuser(){
 }
 
 function Install_UP(){
-    VERSION=02
+    VERSION=01
     curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
-    LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}' | egrep -io '[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}')
-    NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}' | egrep -io '[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}')
+    LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
+    NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
     if [[ ${LOC_VER} -lt ${NET_VER} ]]; then
         echo -e "\033[32m    更新脚本成功.\033[0m"
         cp -rf /tmp/upadbyby.tmp /bin/upadbyby
