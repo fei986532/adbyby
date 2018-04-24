@@ -69,6 +69,7 @@ function upuser(){
         rm -f ${DATA_PATH}/user-rule.tmp
         exit 1
     else
+        echo -e "    \n\033[32m顺便更新了一下用户自己义规则.\033[0m"
         rm -f ${DATA_PATH}/user.txt
         cp -rf ${DATA_PATH}/user-rule.tmp ${DATA_PATH}/user.txt
         rm -f ${DATA_PATH}/user-rule.tmp
