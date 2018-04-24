@@ -11,54 +11,43 @@ function uprule(){
     if [[ "${parstr}" == "lazy" || "${parstr}" == "video" ]]; then
         echo
         echo -e "\033[32m    正在更新: ${parstr}规则,请稍等...\033[0m"
-        if [[ -f $DATA_PATH/adbyby-rule.tmp ]]; then
-            rm -f $DATA_PATH/adbyby-rule.tmp
+        if [[ -f ${DATA_PATH}/adbyby-rule.tmp ]]; then
+            rm -f ${DATA_PATH}/adbyby-rule.tmp
         fi
-        if command -v wget >/dev/null 2>&1; then
-            url="http://update.adbyby.com/rule3/${parstr}.jpg"
-            if ! wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp >/dev/null 2>&1; then
-                rm -f $DATA_PATH/adbyby-rule.tmp
-                url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
-                if ! wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp >/dev/null 2>&1; then
-                    echo -e "\033[41;37m    下载 ${parstr} 规则失败 $? \033[0m"
-                    rm -f $DATA_PATH/adbyby-rule.tmp
-                    exit 1
-                fi
-            fi
-        elif command -v curl >/dev/null 2>&1; then
-            url="http://update.adbyby.com/rule3/${parstr}.jpg"
-            if ! curl -skL ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 >/dev/null 2>&1; then
-                rm -f $DATA_PATH/adbyby-rule.tmp
-                url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
-                if ! curl -skL ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 >/dev/null 2>&1; then
-                    echo -e "\033[41;37m    下载 ${parstr} 规则失败 $? \033[0m"
-                    rm -f $DATA_PATH/adbyby-rule.tmp
-                    exit 1
-                fi
+        url="http://update.adbyby.com/rule3/${parstr}.jpg"
+        if ! curl -skL ${url} -o ${DATA_PATH}/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
+            rm -f ${DATA_PATH}/adbyby-rule.tmp
+            url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
+            if ! curl -skL ${url} -o ${DATA_PATH}/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
+                echo -e "\033[41;37m    下载 ${parstr} 规则失败 $? \033[0m"
+                rm -f ${DATA_PATH}/adbyby-rule.tmp
+                exit 1
             fi
         fi
-        if ! head -1 $DATA_PATH/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}' >/dev/null 2>&1; then
+        if ! head -1 ${DATA_PATH}/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}' >/dev/null 2>&1; then
             echo -e "\033[41;37m    下载 $url 失败 $? \033[0m"
-            rm -f $DATA_PATH/adbyby-rule.tmp
+            rm -f ${DATA_PATH}/adbyby-rule.tmp
             exit 1
         fi
     else
         echo -e "\033[41;37m    未知规则: ${parstr}\033[0m"
+        rm -f ${DATA_PATH}/adbyby-rule.tmp
         exit 1
     fi
-    OLD_STR=$(head -1 $DATA_PATH/$parstr.txt | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}')
+    OLD_STR=$(head -1 ${DATA_PATH}/$parstr.txt | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}')
     OLD_INT=$(date -d "${OLD_STR}" +%s)
-    NEW_STR=$(head -1 $DATA_PATH/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}')
+    NEW_STR=$(head -1 ${DATA_PATH}/adbyby-rule.tmp | egrep -io '[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}[[:space:]*][0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}')
     NEW_INT=$(date -d "${NEW_STR}" +%s)
     echo -e "\033[32m    规则地址: $url \033[0m"
     echo -e "\033[32m    本地版本: $OLD_STR \033[0m"
     echo -e "\033[32m    在线版本: $NEW_STR \033[0m"
     if [[ $OLD_INT -lt $NEW_INT  ]]; then
-        if cp -f $DATA_PATH/adbyby-rule.tmp $DATA_PATH/$parstr.txt; then
+        if cp -rf ${DATA_PATH}/adbyby-rule.tmp ${DATA_PATH}/$parstr.txt; then
             echo -e "\033[32m    更新结果: 更新成功.\033[0m"
+            rm -f ${DATA_PATH}/adbyby-rule.tmp
         else
             echo -e "\033[32m    更新结果: 错误[$?] \033[0m"
-            rm -f $DATA_PATH/adbyby-rule.tmp
+            rm -f ${DATA_PATH}/adbyby-rule.tmp
             exit 1
         fi
         ((i++))
@@ -67,36 +56,42 @@ function uprule(){
         fi
     else
         echo -e "\033[32m    更新结果: 规则已是最新版本.\033[0m"
+        rm -f ${DATA_PATH}/adbyby-rule.tmp
     fi
-    rm -f $DATA_PATH/adbyby-rule.tmp
 }
 
 function upuser(){
-    if [[ -f $DATA_PATH/adbyby-rule.tmp ]]; then
-        rm -f $DATA_PATH/adbyby-rule.tmp
+    if [[ -f ${DATA_PATH}/user-rule.tmp ]]; then
+        rm -f ${DATA_PATH}/user-rule.tmp
     fi
     url="https://raw.githubusercontent.com/viagram/adbyby/master/user.txt"
-    if command -v wget >/dev/null 2>&1; then
-        if ! wget --no-check-certificate -t3 -T5 -c ${url} -O $DATA_PATH/adbyby-rule.tmp >/dev/null 2>&1; then
-            rm -f $DATA_PATH/adbyby-rule.tmp
-           if command -v curl >/dev/null 2>&1; then
-                if ! curl -skL ${url} -o $DATA_PATH/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
-                    rm -f $DATA_PATH/adbyby-rule.tmp
-                    exit 1
-                fi
-            fi
-        fi
+    if ! curl -skL ${url} -o ${DATA_PATH}/user-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
+        rm -f ${DATA_PATH}/user-rule.tmp
+        exit 1
+    else
+        rm -f ${DATA_PATH}/user.txt
+        cp -rf ${DATA_PATH}/user-rule.tmp ${DATA_PATH}/user.txt
+        rm -f ${DATA_PATH}/user-rule.tmp
     fi
 }
 
 function Install_UP(){
+    VERSION=1.0.0
+    curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
+    LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}' | egrep -io '[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}')
+    NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}' | egrep -io '[0-9]{1,2}.[0-9]{1,2}.[0-9]{1,2}')
+    if [[ ${LOC_VER} -lt ${NET_VER} ]]; then
+        echo -e "\033[32m    更新脚本成功.\033[0m"
+        cp -rf /tmp/upadbyby.tmp /bin/upadbyby
+        rm -f /tmp/upadbyby.tmp
+    fi
     MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
     if [[ "${MYSLEF}" != "/bin/upadbyby" ]]; then
         echo -e "\033[32m    正在安装自动更新脚本,请稍等...\033[0m"
         if [[ -e /bin/upadbyby ]]; then
             rm -f /bin/upadbyby
         fi
-        if cp -f ${MYSLEF} /bin/upadbyby; then
+        if cp -rf ${MYSLEF} /bin/upadbyby; then
             echo -e "    \033[32m自动更新脚本安装成功.\033[0m"
         else
             echo -e "    \033[41;37m自动更新脚本安装失败.\033[0m"
@@ -116,6 +111,11 @@ function Install_UP(){
     fi
 }
 
+################################################################################################
+if ! command -v curl >/dev/null 2>&1; then
+    opkg update
+    opkg install curl
+fi
 Install_UP
 if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
     uprule lazy
