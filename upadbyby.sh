@@ -77,7 +77,6 @@ function upuser(){
         fi
         cp -rf /tmp/user-rule.tmp /usr/adbyby/user.txt
         rm -f /tmp/user-rule.tmp
-        /etc/init.d/adbyby restart 2>/dev/null
     fi
 }
 
@@ -130,4 +129,5 @@ if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
     uprule lazy
     uprule video
     upuser
+    /etc/init.d/adbyby restart
 fi
