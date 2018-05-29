@@ -14,10 +14,10 @@ function uprule(){
         if [[ -f ${DATA_PATH}/adbyby-rule.tmp ]]; then
             rm -f ${DATA_PATH}/adbyby-rule.tmp
         fi
-        url="http://update.adbyby.com/rule3/${parstr}.jpg"
+        url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
         if ! curl -skL ${url} -o ${DATA_PATH}/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
             rm -f ${DATA_PATH}/adbyby-rule.tmp
-            url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
+            url="http://update.adbyby.com/rule3/${parstr}.jpg"
             if ! curl -skL ${url} -o ${DATA_PATH}/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
                 echo -e "\033[41;37m    下载 ${parstr} 规则失败 $? \033[0m"
                 rm -f ${DATA_PATH}/adbyby-rule.tmp
