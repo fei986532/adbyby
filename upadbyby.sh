@@ -91,6 +91,8 @@ function Install_UP(){
         chmod +x /bin/upadbyby
         echo -e "\033[32m    自动更新脚本更新成功.\033[0m"
         rm -f /tmp/upadbyby.tmp
+        upadbyby
+        exit $?
     fi
     MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
     if [[ "${MYSLEF}" != "/bin/upadbyby" ]]; then
