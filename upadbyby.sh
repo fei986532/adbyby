@@ -124,6 +124,10 @@ if ! command -v curl >/dev/null 2>&1; then
     opkg update
     opkg install curl
 fi
+if ! cat /etc/dnsmasq.conf | grep -i 'conf-dir=/etc/dnsmasq.ssr' >/dev/null 2>&1; then
+    echo 'conf-dir=/etc/dnsmasq.ssr'>/etc/dnsmasq.conf
+    /etc/init.d/dnsmasq restart
+fi
 Install_UP
 if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
     uprule lazy
