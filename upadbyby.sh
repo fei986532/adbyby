@@ -53,7 +53,7 @@ function uprule(){
         ((i++))
         if [[ ${i} -gt 2 ]]; then
             #/etc/init.d/adbyby restart 2>/dev/null
-            sleep 0.1
+            sleep 1
         fi
     else
         echo -e "\033[32m    更新结果: 规则已是最新版本.\033[0m"
