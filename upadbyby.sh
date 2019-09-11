@@ -65,7 +65,7 @@ function upuser(){
     if [[ -f /tmp/user-rule.tmp ]]; then
         rm -f /tmp/user-rule.tmp
     fi
-    echo -e "\n\033[32m    顺便更新一下用户自己义规则.\033[0m"
+    echo -e "\n\033[32m    顺便更新一下用户自定义规则.\033[0m"
     url="https://dnsdian.com/OpenWRT/user.txt"
     if ! curl -skL ${url} -o /tmp/user-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
         rm -f /tmp/user-rule.tmp
