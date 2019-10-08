@@ -75,14 +75,14 @@ function upuser(){
 			rm -f /usr/adbyby/user.txt
 			\cp -rf /tmp/user-rule.tmp /usr/adbyby/user.txt
 		fi
-		rm -f ${DATA_PATH}/user.txt
-		\cp -rf /tmp/user-rule.tmp ${DATA_PATH}/user.txt
+		rm -f /usr/share/adbyby/rules.txt
+		\cp -rf /tmp/user-rule.tmp /usr/share/adbyby/rules.txt
 		rm -f /tmp/user-rule.tmp
 	fi
 }
 
 function Install_UP(){
-	VERSION=05
+	VERSION=06
 	curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
 	LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
 	NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
