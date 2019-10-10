@@ -76,11 +76,11 @@ function upuser(){
 function Install_UP(){
 	VERSION=07
 	curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
-	LOC_VER=$(cat /bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
+	LOC_VER=$(cat /usr/bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
 	NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
 	if [[ ${LOC_VER} -lt ${NET_VER} ]]; then
-		cp -rf /tmp/upadbyby.tmp /bin/upadbyby
-		chmod +x /bin/upadbyby
+		cp -rf /tmp/upadbyby.tmp /usr/bin/upadbyby
+		chmod +x /usr/bin/upadbyby
 		echo -e "\033[32m	自动更新脚本更新成功.\033[0m"
 		rm -f /tmp/upadbyby.tmp
 		upadbyby
@@ -88,21 +88,21 @@ function Install_UP(){
 	fi
 	rm -f /tmp/upadbyby.tmp
 	MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
-	if [[ "${MYSLEF}" != "/bin/upadbyby" ]]; then
+	if [[ "${MYSLEF}" != "/usr/bin/upadbyby" ]]; then
 		echo -e "\033[32m	正在安装自动更新脚本,请稍等...\033[0m"
-		[[ -e /bin/upadbyby ]] && rm -f /bin/upadbyby
-		if cp -rf ${MYSLEF} /bin/upadbyby; then
+		[[ -e /usr/bin/upadbyby ]] && rm -f /usr/bin/upadbyby
+		if cp -rf ${MYSLEF} /usr/bin/upadbyby; then
 			echo -e "	\033[32m自动更新脚本安装成功.\033[0m"
 		else
 			echo -e "	\033[41;37m自动更新脚本安装失败.\033[0m"
 		fi
-		chmod +x /bin/upadbyby
+		chmod +x /usr/bin/upadbyby
 		rm -f $(readlink -f $0)
 	fi
 	CRON_FILE="/etc/crontabs/root"
-	if [[ ! $(cat ${CRON_FILE}) =~ "*/480 * * * * /bin/upadbyby" ]]; then
+	if [[ ! $(cat ${CRON_FILE}) =~ "*/480 * * * * /usr/bin/upadbyby" ]]; then
 		echo -e "	\033[32m正在添加计划任务..."
-		if echo "*/480 * * * * /bin/upadbyby" >> ${CRON_FILE}; then
+		if echo "*/480 * * * * /usr/bin/upadbyby" >> ${CRON_FILE}; then
 			echo -e "	\033[32m计划任务安装成功.\033[0m"
 		else
 			echo -e "	\033[41;37m计划任务安装失败.\033[0m"
