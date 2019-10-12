@@ -78,7 +78,7 @@ function Install_UP(){
 	curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
 	LOC_VER=$(cat /usr/bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
 	NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
-	if [[ ${LOC_VER} -lt ${NET_VER} ]]; then
+	if [[ ${10#LOC_VER} -lt ${10#NET_VER} ]]; then
 		cp -rf /tmp/upadbyby.tmp /usr/bin/upadbyby
 		chmod +x /usr/bin/upadbyby
 		echo -e "\033[32m	自动更新脚本更新成功.\033[0m"
