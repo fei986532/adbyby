@@ -76,6 +76,7 @@ function up_user(){
 
 function Install_UP(){
 	VERSION=12
+	MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
 	curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
 	LOC_VER=$(cat /usr/bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
 	NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
@@ -84,12 +85,11 @@ function Install_UP(){
 		cp -rf /tmp/upadbyby.tmp /usr/bin/upadbyby
 		chmod +x /usr/bin/upadbyby
 		echo -e "\033[32m	自动更新脚本更新成功.\033[0m"
-		rm -f /tmp/upadbyby.tmp
+		rm -f /tmp/upadbyby.tmp ${MYSLEF}
 		upadbyby
 		exit $?
 	fi
 	rm -f /tmp/upadbyby.tmp
-	MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
 	if [[ "${MYSLEF}" != "/usr/bin/upadbyby" ]]; then
 		echo -e "\033[32m	正在安装自动更新脚本,请稍等...\033[0m"
 		[[ -e /usr/bin/upadbyby ]] && rm -f /usr/bin/upadbyby
@@ -99,7 +99,7 @@ function Install_UP(){
 			echo -e "	\033[41;37m自动更新脚本安装失败.\033[0m"
 		fi
 		chmod +x /usr/bin/upadbyby
-		rm -f $(readlink -f $0)
+		rm -f ${MYSLEF}
 	fi
 	CRON_FILE="/etc/crontabs/root"
 	if [[ ! $(cat ${CRON_FILE}) =~ "*/480 * * * * /usr/bin/upadbyby" ]]; then
