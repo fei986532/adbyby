@@ -12,7 +12,8 @@ function uprule(){
 		echo
 		echo -e "\033[32m	正在更新: ${parstr}规则,请稍等...\033[0m"
 		[[ -f ${DATA_PATH}/adbyby-rule.tmp ]] && rm -f ${DATA_PATH}/adbyby-rule.tmp
-		url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
+		#url="https://raw.githubusercontent.com/adbyby/xwhyc-rules/master/${parstr}.txt"
+		url="https://adbyby.coding.net/p/xwhyc-rules/d/xwhyc-rules/git/raw/master/${parstr}.txt"
 		if ! curl -skL ${url} -o ${DATA_PATH}/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
 			rm -f ${DATA_PATH}/adbyby-rule.tmp
 			if ! curl -skL ${url} -o ${DATA_PATH}/adbyby-rule.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10 >/dev/null 2>&1; then
@@ -55,7 +56,7 @@ function uprule(){
 	fi
 }
 
-function upuser(){
+function up_user(){
 	[[ -f /tmp/user-rule.tmp ]] && rm -f /tmp/user-rule.tmp
 	echo -e "\n\033[32m	顺便更新一下用户自定义规则.\033[0m"
 	url="https://dnsdian.com/OpenWRT/user.txt"
@@ -74,7 +75,7 @@ function upuser(){
 }
 
 function Install_UP(){
-	VERSION=10
+	VERSION=11
 	curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
 	LOC_VER=$(cat /usr/bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
 	NET_VER=$(cat /tmp/upadbyby.tmp | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
@@ -120,6 +121,6 @@ Install_UP
 if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
 	uprule lazy
 	uprule video
-	upuser
+	up_user
 	/etc/init.d/adbyby restart >/dev/null 2>&1
 fi
