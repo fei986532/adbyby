@@ -75,7 +75,7 @@ function up_user(){
 }
 
 function Install_UP(){
-	VERSION=13
+	VERSION=14
 	MYSLEF="$(dirname $(readlink -f $0))/$(basename $0)"
 	curl -skL "https://raw.githubusercontent.com/viagram/adbyby/master/upadbyby.sh" -o /tmp/upadbyby.tmp --retry 3 --speed-time 10 --speed-limit 1 --connect-timeout 10
 	LOC_VER=$(cat /usr/bin/upadbyby | egrep -io 'VERSION=[0-9]{1,3}' | egrep -io '[0-9]{1,3}')
@@ -122,5 +122,6 @@ if [[ -n $(ps | grep -v grep | grep -i '/adbyby') ]]; then
 	uprule lazy
 	uprule video
 	up_user
+	rm -rf /tmp/adbyby
 	/etc/init.d/adbyby restart >/dev/null 2>&1
 fi
